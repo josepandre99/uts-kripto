@@ -1,11 +1,12 @@
 import math
 import numpy as np
+import random
 
-class block_cipher:
+class BlockCipher:
     
-    block_length = 128
-    key_length = 128
-    iteration = 16
+    BLOCK_LENGTH = 128
+    KEY_LENGTH = 128
+    NUMBER_ITERATION = 16
     
     sbox = [
         0x63, 0x7c, 0x77, 0x7b, 0xf2, 0x6b, 0x6f, 0xc5, 0x30, 0x01, 0x67, 0x2b, 0xfe, 0xd7, 0xab, 0x76,
@@ -25,12 +26,14 @@ class block_cipher:
         0xe1, 0xf8, 0x98, 0x11, 0x69, 0xd9, 0x8e, 0x94, 0x9b, 0x1e, 0x87, 0xe9, 0xce, 0x55, 0x28, 0xdf,
         0x8c, 0xa1, 0x89, 0x0d, 0xbf, 0xe6, 0x42, 0x68, 0x41, 0x99, 0x2d, 0x0f, 0xb0, 0x54, 0xbb, 0x16
         ]
+    
+    list_power_2 = [0, 1, 2, 4, 8, 16, 32, 64]
         
     def __init__(self, plain_text, key):
         self.plain_text = plain_text
         self.key = key 
         self.bit_plain_text = self.convert_str_to_bit(self.plain_text)
-        
+        self.seed_key = self.count_seed(self.key)
         
     def print_data(self):
         print("Plain text :", self.plain_text)
@@ -60,7 +63,7 @@ class block_cipher:
         return str_hex
 
     
-    def xor_bit(self, a, b):
+    def xor_bit(self, a, b):    # length a = b
         temp = ''
         for i in range(len(a)):
             if (a[i] == b[i]):
@@ -70,52 +73,71 @@ class block_cipher:
         return temp
     
     
-    # Jaringan Feistel
-    def feistel(self, bit_plain_text):
-        left_bit = bit_plain_text[:self.block_length//2]
-        right_bit = bit_plain_text[self.block_length//2:]
+    # Jaringan Feistel_encryption
+    def feistel_encryption(self, bit_plain_text):
+        left_bit = bit_plain_text[:self.BLOCK_LENGTH//2]
+        right_bit = bit_plain_text[self.BLOCK_LENGTH//2:]
         
-        key_bit = self.convert_str_to_bit(self.key) # Asumsi semua internal key = eksternal key
-        # print("key bit : ", key_bit)
-        
-        print("Awal       : ", self.convert_bit_to_char(left_bit + right_bit))
-        
-        for i in range (self.iteration):
+        for i in range (self.NUMBER_ITERATION):
+            round_key = self.generate_round_key(self.key, i)
+            key_bit = self.convert_str_to_bit(round_key)
             temp_bit = left_bit
             left_bit = right_bit
             f_return = self.f_function(right_bit, key_bit)
             right_bit = self.xor_bit(temp_bit, f_return)
             
-            # print(f"left bit  {i} : ", self.convert_bit_to_char(left_bit))
-            # print(f"right bit {i} : ", self.convert_bit_to_char(right_bit))
         
         temp_bit = left_bit
         left_bit = right_bit
         right_bit = temp_bit
-        print("Hasil      : ", self.convert_bit_to_char(left_bit + right_bit))
-        
-
-
-        # coba dekripsi        
-        for i in range (self.iteration):
-            temp_bit = left_bit
-            left_bit = right_bit
-            f_return = self.f_function(right_bit, key_bit)
-            right_bit = self.xor_bit(temp_bit, f_return)
-            
-        temp_bit = left_bit
-        left_bit = right_bit
-        right_bit = temp_bit
-        print("Hasil Lagi : ", self.convert_bit_to_char(left_bit + right_bit))
-        
+        print("Hasil Enkripsi : ", self.convert_bit_to_char(left_bit + right_bit))
         
         return left_bit + right_bit
     
+    
+    def feistel_decryption(self, bit_plain_text):
+        left_bit = bit_plain_text[:self.BLOCK_LENGTH//2]
+        right_bit = bit_plain_text[self.BLOCK_LENGTH//2:]
+        
+        # coba dekripsi
+        for i in range (self.NUMBER_ITERATION):
+            round_key = self.generate_round_key(self.key, self.NUMBER_ITERATION-i-1)
+            key_bit = self.convert_str_to_bit(round_key)
+            temp_bit = left_bit
+            left_bit = right_bit
+            f_return = self.f_function(right_bit, key_bit)
+            right_bit = self.xor_bit(temp_bit, f_return)
             
-    def f_function(self, right_bit, internal_key_bit):
-        temp = self.xor_bit(right_bit, internal_key_bit)    # XOR right_bit with internal_key_bit
+        temp_bit = left_bit
+        left_bit = right_bit
+        right_bit = temp_bit
+        print("Hasil Dekripsi : ", self.convert_bit_to_char(left_bit + right_bit))
+
+        return left_bit + right_bit
+        
+            
+    def count_seed(self, str_key):
+        seed = 0
+        for i in range(len(str_key)):
+            seed += ord(str_key[i])
+        return seed
+        
+    
+    
+    def generate_round_key(self, external_key, iter_number):
+        random.seed(self.seed_key + iter_number)
+        round_key = ''
+        for _ in range(8):
+            pos = random.randint(0, len(external_key)-1)
+            round_key += external_key[pos]
+        return round_key
+    
+    
+    def f_function(self, right_bit, round_key_bit):
+        temp = self.substitusi_bit(right_bit)   # apply substitusi bit
         temp = self.transpose_matrix(temp)    # apply transpose matrix
         temp = self.s_box_operation(temp)   # apply s-box
+        temp = self.xor_bit(temp, round_key_bit)    # XOR right_bit with round_key_bit
         return temp
         
         
@@ -157,13 +179,26 @@ class block_cipher:
 
         return new_bit_string
         
-        
+    
+    def substitusi_bit(self, bit_string):  # bit pada posisi bukan perpangkatan 2 diubah, bit 0 --> 1, bit 1 --> 0
+        bit_string_copy = ''
+        for i in range(len(bit_string)):
+            if i in self.list_power_2:
+                bit_string_copy += bit_string[i]
+            else:   # i not in self.list_power_2
+                if (bit_string[i] == '1'):
+                    bit_string_copy += '0'
+                else:   # bit_string[i] == '0'
+                    bit_string_copy += '1'
+        return bit_string_copy
+    
 
-a = block_cipher('abcdefghijklmnop', 'key12345')
+a = BlockCipher('abcdefghijklmnop', 'key12345key12345')
 a.print_data()
 
 # print(a.convert_str_to_bit())
-cipher = a.feistel(a.convert_str_to_bit(a.plain_text))
+cipher = a.feistel_encryption(a.convert_str_to_bit(a.plain_text))
+plain = a.feistel_decryption(cipher)
 # print(cipher)
 
 a.s_box_operation(a.convert_str_to_bit(a.plain_text))
@@ -171,4 +206,3 @@ a.s_box_operation(a.convert_str_to_bit(a.plain_text))
 # print(a.convert_bit_to_hex(bin(a.sbox[int("23", 16)])))
 # print(bin(0x26))
 # print(a.convert_bit_to_hex('100110'))
-
