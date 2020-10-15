@@ -1,0 +1,31 @@
+- beroperasi dlm bit
+- ukuran blok : 128 bit, kalo gagal jadi 64 bit
+- panjang kunci : 128 bit
+- operasi dasar : substitusi, permutasi, pergeseran dan mod
+- feistel 16 iterated cipher
+
+
+
+- pembangkitan roundkey : 
+	-> pilihan 1 : diambil sepanjang 8 karakter (64 bit) acak dari external key (random generator dengan seed nomor iterasi (0-15)) (yang diimplemtasi sementara)
+	-> pilihan 2 : random 8 karakter dari key dengan seed nomor iterasi (0-15) -> hasilnya jadikan seed baru, random 8 karakter dari key dengan seed abru untuk jadi round key
+
+
+ide operasi dasar (f function) :
+- substitusi : mengubah bit-bit pada posisi yang bukan perpangkatan 2
+  bit 0 --> 1, bit 1 --> 0
+  posisi ke [1, 2, 4, 8, 16, 32, 64, 128]
+	
+
+- transposisi/ pergeseran
+  ubah bit ke matrix terus lakukan transpose terhadap matrix
+
+
+- substitusi dengan S-BOX (pake S-BOX yg udh ada aja)
+  misal : S-BOX Rijndael
+
+
+
+- 
+
+- mod
