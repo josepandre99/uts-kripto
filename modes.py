@@ -10,8 +10,8 @@ class Modes:
         self.plain_text = plain_text
         self.key = key
         self.list_plain_text = split_string_into_list_of_length_16(plain_text)
-        print("plain :", self.plain_text)
-        print("key :", self.key)
+        # print("plain :", self.plain_text)
+        # print("key :", self.key)
         
     # ECB    
     def ecb_encrypt(self):
@@ -34,7 +34,6 @@ class Modes:
         iv = 'masterencryption'
         index = 0
         result = ''
-
         for i in self.list_plain_text:
             if index == 0:
                 c = iv
@@ -43,14 +42,12 @@ class Modes:
             c = f.encrypt()
             result += c
             index += 1
-        
         return result
 
     def cbc_decrypt(self):
         iv = 'masterencryption'
         index = 0
         result = ''
-
         for i in self.list_plain_text:
             f = bc.BlockCipher(i, self.key)
             if index == 0:
@@ -60,32 +57,202 @@ class Modes:
             c = convert_str_to_bit(i)
             result += convert_bit_to_str(p)
             index += 1
-
         return result
     
     
-## Test ECB
-# enkripsi
-ecb = Modes('abcdefghijklmnopa', 'key12345key12345')
-cipher = ecb.ecb_encrypt()
-print("Total enkripsi:", cipher)
+    # Counter Mode
+    def counter_encrypt(self):
+        counter = 'masterencryption'
+        index = 0
+        result = ''
 
-# dekripsi
-ecb = Modes(cipher, 'key12345key12345')
-plain = ecb.ecb_decrypt()
-print("Total dekripsi:", plain)
+        for i in self.list_plain_text:
+            f = bc.BlockCipher(counter, self.key)
+            m = convert_str_to_bit(f.encrypt())
+            c = xor_bit(m, fix_size_multiple_128(convert_str_to_bit(i))[0])
+            result += c
+            counter = bin(int(convert_str_to_bit(counter), 2) + 1)[2:]
+            index += 1
+        
+        result = convert_bit_to_str(result)
+        return result
 
-print("===========================================================")
+    def counter_decrypt(self):
+        counter = 'masterencryption'
+        index = 0
+        result = ''
 
-## Test cbc
-# enkripsi
-cbc = Modes('abcdefghijklmnopa', 'key12345key12345')
-cipher = cbc.cbc_encrypt()
-print("Total enkripsi:", cipher)
+        for i in self.list_plain_text:
+            f = bc.BlockCipher(counter, self.key)
+            m = convert_str_to_bit(f.encrypt())
+            c = xor_bit(m, fix_size_multiple_128(convert_str_to_bit(i))[0])
+            result += c
+            counter = bin(int(convert_str_to_bit(counter), 2) + 1)[2:]
+            index += 1
+        result = convert_bit_to_str(result)
+        return result
+        
+    
+    # CFB Mode
+    # def cfb_encrypt(self):
+    #     n = 1 #size of unit in bytes (sementara cuma bisa untuk 1 byte)
+    #     iv = 'masterencryption'
+    #     index = 0
+    #     result = ''
 
-# dekripsi
-cbc = Modes(cipher, 'key12345key12345')
-plain = cbc.cbc_decrypt()
-print("Total dekripsi:", plain)
+    #     for i in self.plain_text:
+    #         if index == 0:
+    #             x = iv
+    #         print(f"plain {index} :", self.plain_text, "len x :", len(x))
+    #         print("x :", x)
+    #         f = bc.BlockCipher(x, self.key)
+    #         print("f_encrypt :", f.encrypt(), "awal :", f.encrypt()[0], "bit :", bin(ord(f.encrypt()[0])))
+    #         print("a :", convert_str_to_bit(i))
+    #         print("b :", convert_str_to_bit(f.encrypt()[0]))
+    #         c = xor_bit(convert_str_to_bit(i), convert_str_to_bit(f.encrypt()[0]).zfill(n*8))
+    #         print("hasil :", c, "ascii :", convert_bit_to_str(c))
+    #         result += c
+    #         x = x[n:] + convert_bit_to_str(c)
+    #         print("resultnya :", convert_bit_to_str(result))
+    #         print("="*130)
+    #         index += 1
+        
+    #     result = convert_bit_to_str(result)
+    #     return result
+
+    # def cfb_decrypt(self):
+    #     n = 1 #size of unit in bytes
+    #     iv = 'masterencryption'
+    #     index = 0
+    #     result = ''
+
+    #     for i in self.plain_text:
+    #         if index == 0:
+    #             x = iv
+    #         f = bc.BlockCipher(x, self.key)
+    #         c = xor_bit(convert_str_to_bit(i), convert_str_to_bit(f.decrypt()[0]).zfill(n*8))
+    #         result += c
+    #         x = x[n:] + convert_bit_to_str(c)
+    #         index += 1
+
+    #     result = convert_bit_to_str(result)
+    #     return result
+    
+    
+    # # OFB Mode
+    # def ofb_encrypt(self):
+    #     n = 1 #size of unit in bytes (sementara cuma bisa untuk 1 byte)
+    #     iv = 'masterencryption'
+    #     index = 0
+    #     result = ''
+
+    #     for i in self.plain_text:
+    #         if index == 0:
+    #             x = iv
+    #         print(f"plain {index} :", self.plain_text, "len x :", len(x))
+    #         print("x :", x)
+    #         f = bc.BlockCipher(x, self.key)
+    #         print("f_encrypt :", f.encrypt(), "awal :", f.encrypt()[0], "bit :", bin(ord(f.encrypt()[0])))
+    #         print("a :", convert_str_to_bit(i))
+    #         print("b :", convert_str_to_bit(f.encrypt()[0]))
+    #         c = xor_bit(convert_str_to_bit(i), convert_str_to_bit(f.encrypt()[0]).zfill(n*8))
+    #         print("hasil :", c, "ascii :", convert_bit_to_str(c))
+    #         result += c
+    #         x = x[n:] + f.encrypt()[0]
+    #         print("resultnya :", convert_bit_to_str(result), "lennya :", len(result))
+    #         print("="*130)
+    #         index += 1
+        
+    #     result = convert_bit_to_str(result)
+    #     return result
+
+    # def ofb_decrypt(self):
+    #     n = 1 #size of unit in bytes
+    #     iv = 'masterencryption'
+    #     index = 0
+    #     result = ''
+
+    #     for i in self.plain_text:
+    #         if index == 0:
+    #             x = iv
+    #         f = bc.BlockCipher(x, self.key)
+    #         c = xor_bit(convert_str_to_bit(i), convert_str_to_bit(f.decrypt()[0]).zfill(n*8))
+    #         result += c
+    #         x = x[n:] + f.decrypt()[0]
+    #         index += 1
+
+    #     result = convert_bit_to_str(result)
+    #     return result
+    
+    
+    
+    
+''' =================================================== Testing =================================================== ''' 
+# panjang iv = 16 karakter
+
+plain_text = 'abcdefghijklmnopa'
+key = 'key12345key12345'
+    
+# # Test ECB
+# # enkripsi
+# ecb = Modes(plain_text, key)
+# cipher = ecb.ecb_encrypt()
+# print("Total enkripsi:", cipher)
+
+# # dekripsi
+# ecb = Modes(cipher, key)
+# plain = ecb.ecb_decrypt()
+# print("Total dekripsi:", plain)
+
+# print("===========================================================")
+
+# ## Test CBC
+# # enkripsi
+# cbc = Modes(plain_text, key)
+# cipher = cbc.cbc_encrypt()
+# print("Total enkripsi:", cipher)
+
+# # dekripsi
+# cbc = Modes(cipher, key)
+# plain = cbc.cbc_decrypt()
+# print("Total dekripsi:", plain)
+
+# print("===========================================================")
+
+# ## Test Counter Mode
+# # enkripsi
+# counter = Modes(plain_text, key)
+# cipher = counter.counter_encrypt()
+# print("Total enkripsi:", cipher)
+
+# # dekripsi
+# counter = Modes(cipher, key)
+# plain = counter.counter_decrypt()
+# print("Total dekripsi:", plain)
+
+# print("===========================================================")
+
+## Test CFB Mode
+# # enkripsi
+# cfb = Modes(plain_text, key)
+# cipher = cfb.cfb_encrypt()
+# print("Total enkripsi:", len(cipher))
+
+# # dekripsi
+# cfb = Modes(cipher, key)
+# plain = cfb.cfb_decrypt()
+# print("Total dekripsi:", plain)
 
 
+# print("===========================================================")
+
+## Test OFB Mode
+# # enkripsi
+# ofb = Modes(plain, key)
+# cipher = ofb.ofb_encrypt()
+# print("Total enkripsi:", len(cipher))
+
+# # dekripsi
+# ofb = Modes(cipher, key)
+# plain = ofb.ofb_decrypt()
+# print("Total dekripsi:", plain)
