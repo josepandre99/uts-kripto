@@ -110,6 +110,7 @@ class BlockCipher:
         temp = self.substitusi_bit(right_bit)   # apply substitusi bit
         temp = self.transpose_matrix(temp)    # apply transpose matrix
         temp = self.s_box_operation(temp)   # apply s-box
+        temp = self.mod_operation(temp, round_key_bit)  # apply mod operation
         temp = xor_bit(temp, round_key_bit)    # XOR right_bit with round_key_bit
         return temp
         
@@ -168,6 +169,14 @@ class BlockCipher:
         return bit_string_copy
     
 
+    def mod_operation(self, bit_string, round_key_bit):
+        ord_round_key = int(round_key_bit, 2)
+        
+        new_bit_string = ''
+        for i in range(len(bit_string)//8):
+            new_bit_string += convert_str_to_bit(chr((int(bit_string[i*8:i*8+8], 2) * ord_round_key) % 255))
+        
+        return new_bit_string
 
 
     

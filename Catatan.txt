@@ -28,4 +28,5 @@ ide operasi dasar (f function) :
 
 - 
 
-- mod
+- mod 
+blok diubah ke byte di kali seed round key, kemudian di mod 255

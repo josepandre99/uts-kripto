@@ -202,69 +202,71 @@ class Modes:
 ''' =================================================== Testing =================================================== ''' 
 # panjang iv = 16 karakter
 
-plain_text = 'abcdefghijklmnopa'
-key = 'key12345key12345'
-    
-# # Test ECB
-# # enkripsi
-# ecb = Modes(plain_text, key)
-# cipher = ecb.ecb_encrypt()
-# print("Hasil enkripsi:", cipher)
+if __name__ == "__main__":
+        
+    plain_text = 'abcdefghijklmnopa'
+    key = 'key12345key12345'
+        
+    # Test ECB
+    # enkripsi
+    ecb = Modes(plain_text, key)
+    cipher = ecb.ecb_encrypt()
+    print("Hasil enkripsi:", cipher)
 
-# # dekripsi
-# ecb = Modes(cipher, key)
-# plain = ecb.ecb_decrypt()
-# print("Hasil dekripsi:", plain)
+    # dekripsi
+    ecb = Modes(cipher, key)
+    plain = ecb.ecb_decrypt()
+    print("Hasil dekripsi:", plain)
 
-# print("===========================================================")
+    # print("===========================================================")
 
-## Test CBC
-# # enkripsi
-# cbc = Modes(plain_text, key)
-# cipher = cbc.cbc_encrypt()
-# print("Hasil enkripsi:", cipher)
+    ## Test CBC
+    # # enkripsi
+    # cbc = Modes(plain_text, key)
+    # cipher = cbc.cbc_encrypt()
+    # print("Hasil enkripsi:", cipher)
 
-# # dekripsi
-# cbc = Modes(cipher, key)
-# plain = cbc.cbc_decrypt()
-# print("Hasil dekripsi:", plain)
+    # # dekripsi
+    # cbc = Modes(cipher, key)
+    # plain = cbc.cbc_decrypt()
+    # print("Hasil dekripsi:", plain)
 
-# print("===========================================================")
+    # print("===========================================================")
 
-## Test Counter Mode
-# # enkripsi
-# counter = Modes(plain_text, key)
-# cipher = counter.counter_encrypt()
-# print("Hasil enkripsi:", cipher)
+    ## Test Counter Mode
+    # # enkripsi
+    # counter = Modes(plain_text, key)
+    # cipher = counter.counter_encrypt()
+    # print("Hasil enkripsi:", cipher)
 
-# # dekripsi
-# counter = Modes(cipher, key)
-# plain = counter.counter_decrypt()
-# print("Hasil dekripsi:", plain)
+    # # dekripsi
+    # counter = Modes(cipher, key)
+    # plain = counter.counter_decrypt()
+    # print("Hasil dekripsi:", plain)
 
-# print("===========================================================")
+    # print("===========================================================")
 
-# # Test CFB Mode
-# # enkripsi
-# cfb = Modes(plain_text, key)
-# cipher = cfb.cfb_encrypt()
-# print("Hasil enkripsi:", cipher)
+    # # Test CFB Mode
+    # # enkripsi
+    # cfb = Modes(plain_text, key)
+    # cipher = cfb.cfb_encrypt()
+    # print("Hasil enkripsi:", cipher)
 
-# # dekripsi
-# cfb = Modes(cipher, key)
-# plain = cfb.cfb_decrypt()
-# print("Hasil dekripsi:", plain)
+    # # dekripsi
+    # cfb = Modes(cipher, key)
+    # plain = cfb.cfb_decrypt()
+    # print("Hasil dekripsi:", plain)
 
 
-# print("===========================================================")
+    # print("===========================================================")
 
-## Test OFB Mode
-# # enkripsi
-# ofb = Modes(plain, key)
-# cipher = ofb.ofb_encrypt()
-# print("Hasil enkripsi:", len(cipher))
+    ## Test OFB Mode
+    # # enkripsi
+    # ofb = Modes(plain, key)
+    # cipher = ofb.ofb_encrypt()
+    # print("Hasil enkripsi:", len(cipher))
 
-# # dekripsi
-# ofb = Modes(cipher, key)
-# plain = ofb.ofb_decrypt()
-# print("Hasil dekripsi:", plain)
+    # # dekripsi
+    # ofb = Modes(cipher, key)
+    # plain = ofb.ofb_decrypt()
+    # print("Hasil dekripsi:", plain)
