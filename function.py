@@ -33,8 +33,6 @@ def xor_bit(a, b):    # length a = b
     
     
 def split_string_into_list_of_length_n(string, n):
-    if (len(string) % n) != 0: 
-        raise Exception()
     return [string[i:i + n] for i in range(0, len(string), n)]
 
 

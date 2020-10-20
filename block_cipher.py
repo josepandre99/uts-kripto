@@ -30,17 +30,16 @@ class BlockCipher:
     
     list_power_2 = [0, 1, 2, 4, 8, 16, 32, 64]
         
-    def __init__(self, plain_text, key):
-        self.plain_text = plain_text
-        self.key = key 
-        self.bit_plain_text = convert_str_to_bit(self.plain_text)
-        if (len(plain_text)%16 != 0):
+    def __init__(self, bit_plain_text, bit_key):
+        self.bit_plain_text = bit_plain_text
+        self.bit_key = bit_key
+        if (len(bit_plain_text)%128 != 0):
             self.bit_plain_text = fix_size_multiple_128(self.bit_plain_text)[0]
-        self.seed_key = self.count_seed(self.key)
+        self.seed_key = self.count_seed(self.bit_key)
         
     def print_data(self):
-        print("Plain text :", self.plain_text)
-        print("Key :", self.key)
+        print("Plain text :", self.bit_plain_text)
+        print("Key :", self.bit_key)
     
     
     
@@ -52,7 +51,7 @@ class BlockCipher:
         right_bit = bit_plain_text[self.BLOCK_LENGTH//2:]
         
         for i in range (self.NUMBER_ITERATION):
-            round_key = self.generate_round_key(self.key, i)
+            round_key = self.generate_round_key(self.bit_key, i)
             key_bit = convert_str_to_bit(round_key)
             temp_bit = left_bit
             left_bit = right_bit
@@ -64,7 +63,7 @@ class BlockCipher:
         left_bit = right_bit
         right_bit = temp_bit
         
-        return convert_bit_to_str(left_bit + right_bit)
+        return left_bit + right_bit
     
     
     def decrypt(self):
@@ -75,7 +74,7 @@ class BlockCipher:
         
         # coba dekripsi
         for i in range (self.NUMBER_ITERATION):
-            round_key = self.generate_round_key(self.key, self.NUMBER_ITERATION-i-1)
+            round_key = self.generate_round_key(self.bit_key, self.NUMBER_ITERATION-i-1)
             key_bit = convert_str_to_bit(round_key)
             temp_bit = left_bit
             left_bit = right_bit
@@ -86,10 +85,11 @@ class BlockCipher:
         left_bit = right_bit
         right_bit = temp_bit
 
-        return convert_bit_to_str(left_bit + right_bit)
+        return left_bit + right_bit
         
             
-    def count_seed(self, str_key):
+    def count_seed(self, bit_key):
+        str_key = convert_bit_to_str(bit_key)
         seed = 0
         for i in range(len(str_key)):
             seed += ord(str_key[i])
@@ -173,13 +173,14 @@ class BlockCipher:
     
 if __name__ == "__main__":
     # enkripsi
-    a = BlockCipher('abcdefghijklmnp', 'key12345key12345')
+    a = BlockCipher(convert_str_to_bit('abcdefghijklmnop'), convert_str_to_bit('key12345key12345'))
     a.print_data()
     cipher = a.encrypt()
-    print("hasil enkripsi :", cipher)
+    print(len(cipher))
+    print("hasil enkripsi :", convert_bit_to_str(cipher))
 
     # dekripsi
-    a = BlockCipher(cipher, 'key12345key12345')
+    a = BlockCipher(cipher, convert_str_to_bit('key12345key12345'))
     plain = a.decrypt()
-    print("hasil dekripsi :", plain)
+    print("hasil dekripsi :", convert_bit_to_str(plain))
 
