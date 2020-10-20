@@ -207,16 +207,16 @@ if __name__ == "__main__":
     plain_text = 'abcdefghijklmnopa'
     key = 'key12345key12345'
         
-    # Test ECB
-    # enkripsi
-    ecb = Modes(plain_text, key)
-    cipher = ecb.ecb_encrypt()
-    print("Hasil enkripsi:", cipher)
+    # # Test ECB
+    # # enkripsi
+    # ecb = Modes(plain_text, key)
+    # cipher = ecb.ecb_encrypt()
+    # print("Hasil enkripsi:", cipher)
 
-    # dekripsi
-    ecb = Modes(cipher, key)
-    plain = ecb.ecb_decrypt()
-    print("Hasil dekripsi:", plain)
+    # # dekripsi
+    # ecb = Modes(cipher, key)
+    # plain = ecb.ecb_decrypt()
+    # print("Hasil dekripsi:", plain)
 
     # print("===========================================================")
 
@@ -233,16 +233,16 @@ if __name__ == "__main__":
 
     # print("===========================================================")
 
-    ## Test Counter Mode
-    # # enkripsi
-    # counter = Modes(plain_text, key)
-    # cipher = counter.counter_encrypt()
-    # print("Hasil enkripsi:", cipher)
+    # Test Counter Mode
+    # enkripsi
+    counter = Modes(plain_text, key)
+    cipher = counter.counter_encrypt()
+    print("Hasil enkripsi:", cipher)
 
-    # # dekripsi
-    # counter = Modes(cipher, key)
-    # plain = counter.counter_decrypt()
-    # print("Hasil dekripsi:", plain)
+    # dekripsi
+    counter = Modes(cipher, key)
+    plain = counter.counter_decrypt()
+    print("Hasil dekripsi:", plain)
 
     # print("===========================================================")
 
