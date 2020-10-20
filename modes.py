@@ -81,32 +81,34 @@ class Modes:
     
     # Counter Mode
     def counter_encrypt(self):
-        counter = 'masterencryption'
+        iv = 'masterencryption'
         index = 0
         result = ''
-
+        counter = convert_str_to_bit(iv)
+        
         for i in self.list_bit_plain_text:
-            f = bc.BlockCipher(convert_str_to_bit(counter), self.bit_key)
+            f = bc.BlockCipher(counter, self.bit_key)
             m = f.encrypt()
             c = xor_bit(m, fix_size_multiple_128(i)[0])
             result += c
-            counter = bin(int(convert_str_to_bit(counter), 2) + 1)[2:]
+            counter = bin(int(counter, 2) + 1)[2:].zfill(128)
             index += 1
             
         return convert_bit_to_str(result)
 
 
     def counter_decrypt(self):
-        counter = 'masterencryption'
+        iv = 'masterencryption'
         index = 0
         result = ''
-
+        counter = convert_str_to_bit(iv)
+        
         for i in self.list_bit_plain_text:
-            f = bc.BlockCipher(convert_str_to_bit(counter), self.bit_key)
+            f = bc.BlockCipher(counter, self.bit_key)
             m = f.encrypt()
             c = xor_bit(m, fix_size_multiple_128(i)[0])
             result += c
-            counter = bin(int(convert_str_to_bit(counter), 2) + 1)[2:]
+            counter = bin(int(counter, 2) + 1)[2:].zfill(128)
             index += 1
             
         return convert_bit_to_str(result)

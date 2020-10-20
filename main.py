@@ -36,40 +36,40 @@ if __name__ == "__main__":
     print(plain_text)
     
 
-    # # Mode ECB
-    # ## enkripsi
-    # start = time.time()
-    # m = Modes(plain_text, key)
-    # cipher = m.ecb_encrypt()
-    # end = time.time()
-    # print(end - start)
-    # writeFileText('test/output/cipher-ECB.txt', cipher)
+    # Mode ECB
+    ## enkripsi
+    start = time.time()
+    m = Modes(plain_text, key)
+    cipher = m.ecb_encrypt()
+    end = time.time()
+    print(end - start)
+    writeFileText('test/output/cipher-ECB.txt', cipher)
 
-    # ## dekripsi
-    # start = time.time()
-    # m = Modes(cipher, key)
-    # plain = m.ecb_decrypt()
-    # end = time.time()
-    # print(end - start)
-    # writeFile('test/output/plain-ECB.txt', plain)
+    ## dekripsi
+    start = time.time()
+    m = Modes(cipher, key)
+    plain = m.ecb_decrypt()
+    end = time.time()
+    print(end - start)
+    writeFile('test/output/plain-ECB.txt', plain)
     
     
-    # # Mode CBC
-    # ## enkripsi
-    # start = time.time()
-    # m = Modes(plain_text, key)
-    # cipher = m.cbc_encrypt()
-    # end = time.time()
-    # print(end - start)
-    # writeFileText('test/output/cipher-CBC.txt', cipher)
+    # Mode CBC
+    ## enkripsi
+    start = time.time()
+    m = Modes(plain_text, key)
+    cipher = m.cbc_encrypt()
+    end = time.time()
+    print(end - start)
+    writeFileText('test/output/cipher-CBC.txt', cipher)
 
-    # ## dekripsi
-    # start = time.time()
-    # m = Modes(cipher, key)
-    # plain = m.cbc_decrypt()
-    # end = time.time()
-    # print(end - start)
-    # writeFile('test/output/plain-CBC.txt', plain)
+    ## dekripsi
+    start = time.time()
+    m = Modes(cipher, key)
+    plain = m.cbc_decrypt()
+    end = time.time()
+    print(end - start)
+    writeFile('test/output/plain-CBC.txt', plain)
     
     
     # Mode Counter
@@ -79,15 +79,13 @@ if __name__ == "__main__":
     cipher = m.counter_encrypt()
     end = time.time()
     print(end - start)
-    print("cipher :", cipher)
     writeFileText('test/output/cipher-Counter.txt', cipher)
 
-    # ## dekripsi
-    # start = time.time()
-    # m = Modes(cipher, key)
-    # plain = m.counter_decrypt()
-    # end = time.time()
-    # print(end - start)
-    # print("plain :", plain)
-    # writeFile('test/output/plain-Counter.txt', plain)
+    ## dekripsi
+    start = time.time()
+    m = Modes(cipher, key)
+    plain = m.counter_decrypt()
+    end = time.time()
+    print(end - start)
+    writeFile('test/output/plain-Counter.txt', plain)
     
