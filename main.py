@@ -34,7 +34,10 @@ if __name__ == "__main__":
 
     # Text File    
     plain_text = readFile('test/test-text.txt')
-    print(plain_text)
+    # print(plain_text)
+    
+    plain_text1 = readFile('test/test-text1.txt')
+    # print(plain_text1)
     
 
     # Mode ECB
@@ -82,6 +85,16 @@ if __name__ == "__main__":
     print(end - start)
     writeFileText('test/output/cipher-Counter.txt', cipher)
 
+
+    # ## enkripsi1
+    # start = time.time()
+    # m1 = Modes(plain_text1, key)
+    # cipher = m1.counter_encrypt()
+    # end = time.time()
+    # print(end - start)
+    # writeFileText('test/output/cipher-Counter1.txt', cipher)
+
+
     ## dekripsi
     start = time.time()
     m = Modes(cipher, key)
@@ -91,62 +104,62 @@ if __name__ == "__main__":
     writeFile('test/output/plain-Counter.txt', plain)
     
 
-    print("============================================================= Batas =============================================================")
+    # print("============================================================= Batas =============================================================")
     
 
-    # Image File
-    plain_text = readFile('test/test-image.png')
+    # # Image File
+    # plain_text = readFile('test/test-image.png')
     
 
-    # Mode ECB
-    ## enkripsi
-    start = time.time()
-    m = Modes(plain_text, key)
-    cipher = m.ecb_encrypt()
-    end = time.time()
-    print(end - start)
-    writeFile('test/output/cipher-ECB.png', cipher)
+    # # Mode ECB
+    # ## enkripsi
+    # start = time.time()
+    # m = Modes(plain_text, key)
+    # cipher = m.ecb_encrypt()
+    # end = time.time()
+    # print(end - start)
+    # writeFile('test/output/cipher-ECB.png', cipher)
 
-    ## dekripsi
-    start = time.time()
-    m = Modes(cipher, key)
-    plain = m.ecb_decrypt()
-    end = time.time()
-    print(end - start)
-    writeFile('test/output/plain-ECB.png', plain)
+    # ## dekripsi
+    # start = time.time()
+    # m = Modes(cipher, key)
+    # plain = m.ecb_decrypt()
+    # end = time.time()
+    # print(end - start)
+    # writeFile('test/output/plain-ECB.png', plain)
     
     
-    # Mode CBC
-    ## enkripsi
-    start = time.time()
-    m = Modes(plain_text, key)
-    cipher = m.cbc_encrypt()
-    end = time.time()
-    print(end - start)
-    writeFile('test/output/cipher-CBC.png', cipher)
+    # # Mode CBC
+    # ## enkripsi
+    # start = time.time()
+    # m = Modes(plain_text, key)
+    # cipher = m.cbc_encrypt()
+    # end = time.time()
+    # print(end - start)
+    # writeFile('test/output/cipher-CBC.png', cipher)
 
-    ## dekripsi
-    start = time.time()
-    m = Modes(cipher, key)
-    plain = m.cbc_decrypt()
-    end = time.time()
-    print(end - start)
-    writeFile('test/output/plain-CBC.png', plain)
+    # ## dekripsi
+    # start = time.time()
+    # m = Modes(cipher, key)
+    # plain = m.cbc_decrypt()
+    # end = time.time()
+    # print(end - start)
+    # writeFile('test/output/plain-CBC.png', plain)
     
     
-    # Mode Counter
-    ## enkripsi
-    start = time.time()
-    m = Modes(plain_text, key)
-    cipher = m.counter_encrypt()
-    end = time.time()
-    print(end - start)
-    writeFile('test/output/cipher-Counter.png', cipher)
+    # # Mode Counter
+    # ## enkripsi
+    # start = time.time()
+    # m = Modes(plain_text, key)
+    # cipher = m.counter_encrypt()
+    # end = time.time()
+    # print(end - start)
+    # writeFile('test/output/cipher-Counter.png', cipher)
 
-    ## dekripsi
-    start = time.time()
-    m = Modes(cipher, key)
-    plain = m.counter_decrypt()
-    end = time.time()
-    print(end - start)
-    writeFile('test/output/plain-Counter.png', plain)
+    # ## dekripsi
+    # start = time.time()
+    # m = Modes(cipher, key)
+    # plain = m.counter_decrypt()
+    # end = time.time()
+    # print(end - start)
+    # writeFile('test/output/plain-Counter.png', plain)

@@ -99,10 +99,11 @@ class BlockCipher:
     
     def generate_round_key(self, external_key, iter_number):
         random.seed(self.seed_key + iter_number)
+        external_key_str = convert_bit_to_str(external_key)
         round_key = ''
         for _ in range(8):
-            pos = random.randint(0, len(external_key)-1)
-            round_key += external_key[pos]
+            pos = random.randint(0, len(external_key_str)-1)
+            round_key += external_key_str[pos]
         return round_key
     
     
