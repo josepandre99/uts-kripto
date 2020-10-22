@@ -1,4 +1,4 @@
-Kriptografi adalah ilmu yang mempelajari teknik-teknik 
+kriptografi adalah ilmu yang mempelajari teknik-teknik 
 matematika yang berhubungan dengan aspek keamanan 
 informasi seperti kerahasiaan, integritas data, serta 
 otentikasi (Menez, 1996).
